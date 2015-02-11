@@ -1,0 +1,19 @@
+{
+  "name": "water",
+  "version": "0.0.0",
+  "authors": [
+    "Alex Storer <alexstorer@gmail.com>"
+  ],
+  "description": "Visualization of California's Drought",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}

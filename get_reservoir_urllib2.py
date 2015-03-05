@@ -30,22 +30,25 @@ for code in reservoirs:
         r = urllib2.urlopen(capacityurl.format(sensor=code))
         #f = StringIO.StringIO(r.text)
         f = StringIO.StringIO(r.read())
-        # skip the first two lines
-        next(f)
-        next(f)
-        dr = csv.DictReader(f,fieldnames=['Date','xxx','Volume'])
-        fw = open('{code}_pct.csv'.format(code=code),'w')
-        dw = csv.DictWriter(fw,fieldnames=['Date','Percentage'])
-        dw.writeheader()
-        for d in dr:
-            row = dict()
-            row['Date'] = d['Date'][0:4]+'-'+d['Date'][4:6]+'-'+d['Date'][6:8]
-            try:
-                row['Percentage'] = 100*float(d['Volume'])/reservoirs[code]['Capacity']
-                if row['Percentage']>120 or row['Percentage']<1:
+        if len(f)<1000:
+            print "Failed to download ", code, " - not updating"
+        else:
+            # skip the first two lines
+            next(f)
+            next(f)
+            dr = csv.DictReader(f,fieldnames=['Date','xxx','Volume'])
+            fw = open('{code}_pct.csv'.format(code=code),'w')
+            dw = csv.DictWriter(fw,fieldnames=['Date','Percentage'])
+            dw.writeheader()
+            for d in dr:
+                row = dict()
+                row['Date'] = d['Date'][0:4]+'-'+d['Date'][4:6]+'-'+d['Date'][6:8]
+                try:
+                    row['Percentage'] = 100*float(d['Volume'])/reservoirs[code]['Capacity']
+                    if row['Percentage']>120 or row['Percentage']<1:
+                        row['Percentage'] = 'm'
+                except:
                     row['Percentage'] = 'm'
-            except:
-                row['Percentage'] = 'm'
-            if row['Percentage'] != 'm':
-                dw.writerow(row)
-        fw.close()
+                if row['Percentage'] != 'm':
+                    dw.writerow(row)
+            fw.close()

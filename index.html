@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+     <style>
+       #map { height: 300px; }
+       #graph { height: 0px; margin-right: 30px;}
+     </style>
+    <script type='text/javascript' src='circles.js'></script>
+     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.1/cosmo/bootstrap.min.css">
+  </head>
+  <title>
+    California Drought
+  </title>
+
+<div id="map"></div>
+ <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+<script type='text/javascript' src="http://dygraphs.com/dygraph-combined.js"></script>
+     <script type='text/javascript'>
+       var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+});
+
+var map = L.map('map', {
+    scrollWheelZoom: false,
+       center: [37, -120],
+    zoom: 5
+});
+
+       map.addLayer(layer);
+
+     </script>
+<script type='text/javascript' src="reservoirpts.js"></script>
+
+
+<div id="topinfo" style="margin-left: 30px;
+    margin-right: 30px;">
+  <h1>How Bad Is The California Drought?</h1>
+  <hr>
+  <h2>Click the reservoirs on the map above to see a history of water levels.</h2>
+  Reservoirs are only one measurement of drought in California, but looking at their water levels over time can give us context for its severity.  If you want a more complete picture, look at the resources below.  And yeah, it's really bad.
+  <br>
+</div>
+
+
+<div id="row">
+    <div id="graph">
+    </div>
+</div>
+
+<div id="row" style="margin-left: 30px;
+    margin-right: 30px; ">
+  <div class="col-md-6" style="margin-bottom: 30px;">
+    <h3>Want to learn more?</h3>
+  <li>
+    <a href="http://cdec.water.ca.gov/reservoir.html">California Water Resources</a>
+  </li>
+  <li>
+    <a href="http://waterdata.usgs.gov/nwis">National Water Data</a>
+  </li>
+  <li>
+    <a href="http://droughtmonitor.unl.edu/">United States Drought Monitor</a>
+  </li>
+  <li>
+    <a href="http://voicesofthedrought.tumblr.com/">Voices of the Drought</a>
+  </li>
+  <li>
+    <a href="http://cida.usgs.gov/ca_drought/">USGS Drought Visualizations</a>
+  </li>
+  </div>
+  <div class="col-md-6">
+    <h3>Credits</h3>
+    Made by <a href="https://twitter.com/alexstorer"><img src="Twitter_logo_blue_16.png"> Alex Storer</a>. Forkable on <a href="https://github.com/alexstorer/water"><img src="GitHub-Mark-32px.png" height="16" width="16"> Github</a>
+    <br><br>
+<!-- AddToAny BEGIN -->
+<div class="a2a_kit a2a_default_style">
+<a class="a2a_dd" href="https://www.addtoany.com/share_save">Share</a>
+<span class="a2a_divider"></span>
+<a class="a2a_button_facebook"></a>
+<a class="a2a_button_twitter"></a>
+<a class="a2a_button_google_plus"></a>
+</div>
+<script type="text/javascript" src="https://static.addtoany.com/menu/page.js"></script>
+<!-- AddToAny END -->
+  </div>
+</div>

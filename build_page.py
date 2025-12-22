@@ -4,10 +4,6 @@ elevationurl = "http://cdec.water.ca.gov/cgi-progs/queryCSV?station_id={sensor}&
 
 capactityurl = "http://cdec.water.ca.gov/cgi-progs/queryCSV?station_id={sensor}&dur_code=D&sensor_num=15&start_date=1900/01/01&end_date=2100/01/01"
 
-fsensors = open('reservoirs.csv','rU')
-dr = csv.DictReader(fsensors)
-
-
 fpoints = open('reservoirpts.js','w')
 
 jsheader = '''
@@ -28,35 +24,34 @@ circ_{sensor}.bindPopup("{name}");
 
 circ_{sensor}.on('click', function (e) {{showReservoir(e.target.options.className)}});
 
-reservoirs['{sensor}'] = {{'name': '{name}',
+reservoirs['{sensor}'] = {{'name': "{name}",
                          'capacity': '{capacity}',
-                         'wiki': '{wiki}'}};
+                         'wiki': "{wiki}"}};
 
 '''
-reservoirs = dict()
-for d in dr:
+
+# headers:
+# ID,DAM,LAKE,STREAM,CAPACITY (AF),Lat,Lon
+
+fsensors = open('reservoirs_md.csv','r')
+dr = csv.DictReader(fsensors)
+reservoirs = [d for d in dr]
+
+# order reservoirs by capacity
+reservoirs = sorted(reservoirs, key=lambda d: float(d['CAPACITY
+
+
+for d in reservoirs:
     #print d
     #r = requests.get(myurl.format(sensor=d['Code']))
-    reservoirs[d['Code']] = d
+    fpoints.write(addstr.format(sensor=d['ID'],
+                                # remove ° symbol
+                                lat=d['Lat'][:-1],
+                                long=d['Lon'][:-1],
+                                radius=10*math.sqrt(float(d['CAPACITY (AF)'])/math.pi),
+                                name=d['LAKE'],
+                                capacity=d['CAPACITY (AF)'],
+                                wiki="https://en.wikipedia.org/wiki/"+d['LAKE'].replace(' ','_')))
 
 fsensors.close()
-fcapacity = open('capacity.csv','rU')
-
-dr = csv.DictReader(fcapacity)
-for d in dr:
-    #print d
-    #r = requests.get(myurl.format(sensor=d['Code']))
-    code = d['Code']
-    if code in reservoirs:
-        reservoirs[code]['Capacity'] = float(d['Capacity'].replace(',',''))
-        r = reservoirs[code]
-        fpoints.write(addstr.format(sensor=r['Code'],
-                                    lat=r['Lat'],
-                                    long=r['Long'],
-                                    radius=10*math.sqrt(r['Capacity']),
-                                    name=r['Name'],
-                                    capacity=d['Capacity'],
-                                    wiki=d['Wiki']))
-
-fcapacity.close()
 fpoints.close()

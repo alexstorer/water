@@ -1,14 +1,20 @@
 from bs4 import BeautifulSoup
-import requests, csv
+import requests, csv, tqdm
 
-f = open('cdec.csv')
+with open('cdec.csv') as f:
+    dr = csv.DictReader(f)
+    cdec = [d for d in dr]
+
+
 fw = open("reservoirs_md.csv",'w')
-dr = csv.DictReader(f)
 dw = csv.DictWriter(fw, fieldnames=dr.fieldnames+['Lat', 'Lon'])
 dw.writeheader()
 
-for d in dr:
-    print(f"Res: {d['ID']}")
+print("Starting reservoir metadata retrieval...")
+
+
+for d in tqdm.tqdm(cdec):
+    #print(f"Res: {d['ID']}")
     url = f"http://cdec.water.ca.gov/dynamicapp/staMeta?station_id={d['ID']}"
     r = requests.get(url)
 
@@ -39,10 +45,11 @@ for d in dr:
         elif 'Sensor Description' in t.text: 
             # this is the sensor data table
             if 'RESERVOIR ELEVATION, FEET' in t.text:
-                print('Sensor Data Present')
+                #print('Sensor Data Present')
                 d['Lat'] = md['Latitude']
                 d['Lon'] = md['Longitude']
                 dw.writerow(d)
             else:
-                print('No Sensor Data')
+                #print('No Sensor Data')
+                pass
 fw.close()

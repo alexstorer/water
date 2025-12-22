@@ -1,5 +1,7 @@
 import requests
 import csv
+import tqdm
+import os
 
 def parseDate(dateStr):
     # date is in YYYY-M-D format
@@ -10,17 +12,22 @@ def parseDate(dateStr):
     day = parts[2].zfill(2)
     return f"{year}-{month}-{day}"
 
-elevationurl = "http://cdec.water.ca.gov/dynamicapp/req/JSONDataServlet?Stations={sensor}&SensorNums=6&dur_code=D&Start={startDate}&End={endDate}"
 capacityurl = "http://cdec.water.ca.gov/dynamicapp/req/JSONDataServlet?Stations={sensor}&SensorNums=15&dur_code=D&Start={startDate}&End={endDate}"
 
-fsensors = open('reservoirs_md.csv','r')
-dr = csv.DictReader(fsensors)
+with open('reservoirs_md.csv','r') as fsensors:
+    dr = csv.DictReader(fsensors)
+    reservoirs = [d for d in dr]
 
-for d in dr:
-    print(f"{d['ID']} -- {d['DAM']}")
+print("Starting reservoir capacity retrieval...")
+
+# ensure data directory exists
+os.makedirs('data', exist_ok=True)
+
+for d in tqdm.tqdm(reservoirs):
+    #print(f"{d['ID']} -- {d['DAM']}")
     r = requests.get(capacityurl.format(sensor=d['ID'], startDate="1900/01/01", endDate="2100/01/01"))
     observations = r.json()
-    fw = open(f'{d["ID"]}_pct.csv','w')
+    fw = open(f'data/{d["ID"]}_pct.csv','w')
     dw = csv.DictWriter(fw,fieldnames=['Date','Percentage'])
     dw.writeheader()
     for obs in observations:

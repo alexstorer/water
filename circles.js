@@ -6,7 +6,7 @@ function showReservoir(code) {
     
         g = new Dygraph(
             document.getElementById("graph"),
-            code+"_pct.csv", // path to CSV file
+            "data/" + code + "_pct.csv", // path to CSV file
             {ylabel: 'Percent Full',
              axes: {
                  y: {

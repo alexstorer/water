@@ -1,9 +1,5 @@
 import csv, math
 
-elevationurl = "http://cdec.water.ca.gov/cgi-progs/queryCSV?station_id={sensor}&dur_code=D&sensor_num=6&start_date=1900/01/01&end_date=2100/01/01"
-
-capactityurl = "http://cdec.water.ca.gov/cgi-progs/queryCSV?station_id={sensor}&dur_code=D&sensor_num=15&start_date=1900/01/01&end_date=2100/01/01"
-
 fpoints = open('reservoirpts.js','w')
 
 jsheader = '''
@@ -33,25 +29,21 @@ reservoirs['{sensor}'] = {{'name': "{name}",
 # headers:
 # ID,DAM,LAKE,STREAM,CAPACITY (AF),Lat,Lon
 
-fsensors = open('reservoirs_md.csv','r')
-dr = csv.DictReader(fsensors)
-reservoirs = [d for d in dr]
+with open('reservoirs_md.csv','r') as fsensors:
+    dr = csv.DictReader(fsensors)
+    reservoirs = [d for d in dr]
 
 # order reservoirs by capacity
-reservoirs = sorted(reservoirs, key=lambda d: float(d['CAPACITY
-
+reservoirs = sorted(reservoirs, key=lambda d: float(d['CAPACITY (AF)']), reverse=True)
 
 for d in reservoirs:
-    #print d
-    #r = requests.get(myurl.format(sensor=d['Code']))
     fpoints.write(addstr.format(sensor=d['ID'],
                                 # remove ° symbol
                                 lat=d['Lat'][:-1],
                                 long=d['Lon'][:-1],
-                                radius=10*math.sqrt(float(d['CAPACITY (AF)'])/math.pi),
+                                radius=20*math.sqrt(float(d['CAPACITY (AF)'])/math.pi),
                                 name=d['LAKE'],
                                 capacity=d['CAPACITY (AF)'],
                                 wiki="https://en.wikipedia.org/wiki/"+d['LAKE'].replace(' ','_')))
 
-fsensors.close()
 fpoints.close()

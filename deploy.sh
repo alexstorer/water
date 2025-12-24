@@ -11,4 +11,9 @@ python3 build_page.py
 # make sure to remove filelist.txt if it exists
 rm -f site/filelist.txt
 find site/ -type f | sed 's|^site/||' > site/filelist.txt
-cd site && python3 -m http.server
+
+# uncomment to serve site locally for testing
+# cd site && python3 -m http.server
+
+# deploy to web server
+rsync -av -e "ssh -i ~/.ssh/id_ed25519_domains" site/ astorers@astorer.su.domains:~/www/water/

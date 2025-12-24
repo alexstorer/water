@@ -21,13 +21,13 @@ with open('reservoirs_md.csv','r') as fsensors:
 print("Starting reservoir capacity retrieval...")
 
 # ensure data directory exists
-os.makedirs('data', exist_ok=True)
+os.makedirs('site/data', exist_ok=True)
 
 for d in tqdm.tqdm(reservoirs):
     #print(f"{d['ID']} -- {d['DAM']}")
     r = requests.get(capacityurl.format(sensor=d['ID'], startDate="1900/01/01", endDate="2100/01/01"))
     observations = r.json()
-    fw = open(f'data/{d["ID"]}_pct.csv','w')
+    fw = open(f'site/data/{d["ID"]}_pct.csv','w')
     dw = csv.DictWriter(fw,fieldnames=['Date','Percentage'])
     dw.writeheader()
     for obs in observations:

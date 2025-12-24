@@ -1,6 +1,6 @@
 import csv, math
 
-fpoints = open('reservoirpts.js','w')
+fpoints = open('site/reservoirpts.js','w')
 
 jsheader = '''
 reservoirs = new Object;
